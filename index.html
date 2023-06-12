@@ -1,31 +1,47 @@
 <html>
 <head>
-	<title>Load Images with Serial Numbers</title>
-	<style>
-		/* Style for images and serial numbers */	
+    <title>Load Images with Serial Numbers</title>
+    <style>
+        /* Style for images and serial numbers */    
 
         .page-layout{
             width: 60%;
             margin: auto;
         }
 
-        .container{            
-            max-width: 80%;	    
+        button {
+        background-color: #2666d6; /* Green */
+        border: none;
+        color: white;
+        padding: 15px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 12px;
+        border-radius: 8px;
         }
-		
-	#image-container{
-	    display: grid;
+
+        .play-button{
+        background-color: #4CAF50;
+        }
+
+        .container{            
+            max-width: 80%;        
+        }
+        
+        #image-container{
+            display: grid;
             grid-template-columns: repeat(1, 1fr);
             grid-template-rows: repeat(1fr);
             grid-row-gap: 1rem;
-	}		
+        }       
 
         .box{
             border: 0.7px solid grey;
             padding: 15px;
             overflow-wrap: break-word;
             height: 800px;
-	    width: 1000px;
+            width: 1000px;
         }
 
         .box img{
@@ -42,37 +58,35 @@
             max-height: -webkit-fill-available;
         }
 
+        @media(max-width: 1000px){
+            img{
+                height: 312px;
+                width:auto;
+            }
+        }   
+        @media(max-width: 850px){
+            img{
+                height: 250px;
+                width:auto;
+            }
 
+        }
+        @media(max-width: 715px){
+            img{
+                height: 200px;
+                width:auto;
+            }
 
-		@media(max-width: 1000px){
-			img{
-				height: 312px;
-            	width:auto;
-			}
-		}	
-		@media(max-width: 850px){
-			img{
-				height: 250px;
-            	width:auto;
-			}
+        }
 
-		}
-		@media(max-width: 715px){
-			img{
-				height: 200px;
-            	width:auto;
-			}
-
-		}
-
-
-
-	</style>
+    </style>
 </head>
-<body>
-	<label for="imageList">Enter the list of image URLs separated by space:</label><br>
-	<input type="text" id="imageList"><br><br>
-	<button onclick="loadImages()">Load Images</button>
+<body>    
+    <label for="imageList">Enter the list of image URLs separated by space:</label><br>
+    <input type="text" id="imageList"><br><br>
+    <button onclick="loadImages()">Load Images</button>
+    <br><br>
+    <button class="play-button" onclick="playAllVideos()">Play All Videos</button>
 
     <div class="page-layout">
         <div class="container">
@@ -80,32 +94,44 @@
         </div>
     </div>
 
-	<script>
-		function loadImages() {
-			// Get the image list from the input field
-			var imageList = document.getElementById("imageList").value;
+    <script>
+        var videos = []; // Array to store video elements
 
-			// Split the list into an array
-			var images = imageList.split(" ");
+        function playAllVideos() {
+            for (var i = 0; i < videos.length; i++) {
+                videos[i].play();
+            }
+        }
 
-			// Clear the image container
-			document.getElementById("image-container").innerHTML = "";
+        function loadImages() {
+            // Get the image list from the input field
+            var imageList = document.getElementById("imageList").value;
 
-			// Loop through the array and display images with serial numbers
-			for (var i = 0; i < images.length; i++) {
-				// Create image element
-				var video = document.createElement("video");
-				video.src = images[i];
+            // Split the list into an array
+            var images = imageList.split(" ");
+
+            // Clear the image container
+            document.getElementById("image-container").innerHTML = "";
+
+            // Reset videos array
+            videos = [];
+
+            // Loop through the array and display images with serial numbers
+            for (var i = 0; i < images.length; i++) {
+                // Create video element
+                var video = document.createElement("video");
+                video.src = images[i];
                 video.controls = true;
+                video.loop = true; // Add the 'loop' attribute
 
-				const p = document.createElement("p");
-				const node = document.createTextNode("Link: " + images[i].toString());
-				p.appendChild(node);
+                const p = document.createElement("p");
+                const node = document.createTextNode("Link: " + images[i].toString());
+                p.appendChild(node);
 
-				// Create serial number element
-				var serial = document.createElement("div");
-				serial.className = "serial";
-				serial.textContent = "Image " + (i + 1);
+                // Create serial number element
+                var serial = document.createElement("div");
+                serial.className = "serial";
+                serial.textContent = "Image " + (i + 1);
 
                 //Create textarea:
                 var textInput = document.createElement("textarea")
@@ -114,18 +140,21 @@
                 textInput.cols = 80;
                 textInput.rows = 7;
 
-				// Create container element for the image and serial number
-				var container = document.createElement("div");
-				container.appendChild(video);
-				container.appendChild(serial);
-				container.appendChild(p);
+                // Create container element for the video and serial number
+                var container = document.createElement("div");
+                container.appendChild(video);
+                container.appendChild(serial);
+                container.appendChild(p);
                 container.appendChild(textInput);
                 container.className = "box";                
 
-				// Add the container to the image container on the web page
-				document.getElementById("image-container").appendChild(container);
-			}
-		}
-	</script>
+                // Add the container to the image container on the web page
+                document.getElementById("image-container").appendChild(container);
+
+                // Push the video element to the videos array
+                videos.push(video);
+            }
+        }
+    </script>
 </body>
 </html>
