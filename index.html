@@ -1,54 +1,100 @@
+<!DOCTYPE html>
 <html>
 <head>
-    <title>Load Images with Serial Numbers</title>
-    <style>
-        /* Style for images and serial numbers */    
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body {
+    margin:0;
+    background-color: #f8f8f8;
+}
 
-        .page-layout{
-            width: 60%;
-            margin: auto;
-        }
+.container{
+    width: 70%;
+    margin: auto;
+}
 
-        .inputs{
-            width: 40%;
-            margin: auto;
-        }
+.navbar {
+    overflow: hidden;
+    background-color: white;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    /* background-image: linear-gradient(to right, rgb(4 8 18), rgb(48,97,215)); */
+    /* background: rgb(48, 97, 215); */
+    color: #ffffff;
+    padding-top: 30px;
+    border-bottom: #669bff 4.5px solid;
+    /* font-family: Roboto;
+    font-size: x-large;
+    font-weight: 300; */
+    z-index: 3;
+}
 
-        button {
-        background-color: #2666d6; /* Green */
-        border: none;
-        color: white;
-        padding: 15px 32px;
-        text-align: center;
-        text-decoration: none;
-        display: block;
-        font-size: 12px;
-        border-radius: 8px;
-        float: right;
-        margin-right: 30px;
-        }
+video-player{
+    z-index: 1;
+}
+.navbar textarea {
+  float: left;
+  display: block;
+  color: #f2f2f2;
+  text-align: left;
+  /* padding: 14px 16px; */
+  text-decoration: none;
+  font-size: 17px;
+  margin-bottom: 10px;
+}
 
-        button:hover{
+.navbar textarea:hover {
+  background: rgb(247, 247, 247);
+  color: black;
+}
+
+button {
+    float: right;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-size: 13px;
+    margin-left: 2.5rem;
+    margin-bottom: 0.5rem;
+    border-radius: 8px;
+    color: white;
+    border: none;
+    background-color: #2666d6;
+}
+
+button:hover{
         background-color:mediumblue;
         box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
         cursor: pointer;
-        }
+}
 
-        .play-button:hover{
+.play-button{
+    background-color: #4CAF50;
+}
+
+.play-button:hover{
         background-color:rgb(10, 125, 25);
         box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
         cursor: pointer;
         }
 
-        .play-button{
-        background-color: #4CAF50;
-        }
+.main {
+  padding: 20px;
+  margin-top: 120px;
+  height: auto; /* Used in this example to enable scrolling */
+  background-color: #f8f8f8;
+}
 
-        .container{            
-            max-width: 80%;        
-        }
-        
-        #image-container{
+.label_class{
+    font-family: sans-serif;
+    color: #6c6c6c;
+    font-size: larger;
+    font-weight: lighter;
+}
+
+/* New Classes */
+#image-container{
             display: grid;
             grid-template-columns: repeat(1, 1fr);
             grid-template-rows: repeat(1fr);
@@ -77,106 +123,135 @@
             max-height: -webkit-fill-available;
         }
 
-        @media(max-width: 1000px){
-            img{
-                height: 312px;
-                width:auto;
-            }
-        }   
-        @media(max-width: 850px){
-            img{
-                height: 250px;
-                width:auto;
-            }
-
-        }
-        @media(max-width: 715px){
-            img{
-                height: 200px;
-                width:auto;
-            }
-
+        input{
+            margin-top: 0.5rem;
+            width: 200px;
+            height: 30px;
         }
 
-    </style>
-</head>
-<body>    
-
-    <div class="inputs">
-    <label for="imageList">Enter the list of image URLs separated by space:</label><br>
-    <input type="text" id="imageList">
+    footer {
+        height: 2em;
+        margin: auto;
+        display: flex;
+        justify-content: center;
+        /* background-color: rgb(48, 97, 215); */
+        background-image: linear-gradient(15deg, rgb(4 8 18), rgb(48,97,215));
+        color:white;
+        align-items: center;
+        height: 50px;    
     
-    <button class="play-button" onclick="playAllVideos()">Play All Videos</button>
-    <button onclick="loadImages()">Load Images</button>
+        /* from p element */
+        /* padding-right: 10px;
+        padding-left: 10px;
+        display: inline-block;
+        color: rgb(48, 97, 215);
+        border: 0.7px solid #f4f4f4;
+        background-color: #f4f4f4;
+        border-radius: 4px;
+        margin: auto; */
+        font-family: sans-serif;
+        font-size: inherit;
+        font-weight: 300;
+        text-align: center;
+}
+
+</style>
+</head>
+<body>
+
+<div class="navbar">
+    <div class="container">
+        <label for="imageList" class="label_class">Enter the list of URLs separated by space:</label><br>
+        <input type="text" id="imageList" cols="40" rows="2" spellcheck="false"></textarea>   
+        <button class="play-button" onclick="playAllVideos()">Play All Videos</button>
+        <button onclick="loadImages()">Load Images</button>
     </div>
-    <br><br><br><br>
-    <div class="page-layout">
+</div>
+
+<div class="main">
         <div class="container">
             <div id="image-container"></div>
         </div>
-    </div>
+</div>
 
-    <script>
-        var videos = []; // Array to store video elements
 
-        function playAllVideos() {
-            for (var i = 0; i < videos.length; i++) {
-                videos[i].play();
-            }
+<section id="my_footer"></section>
+<!-- <footer>
+    <p>© Copyright 2023, All rights reserved by AKHILESH.<br> If you have reached here, till the bottom of the page, you are AWESOME</p>
+</footer> -->
+
+<script>
+    var videos = []; // Array to store video elements
+
+    function playAllVideos() {
+        for (var i = 0; i < videos.length; i++) {
+            videos[i].play();
         }
+    }
 
-        function loadImages() {
-            // Get the image list from the input field
-            var imageList = document.getElementById("imageList").value;
+    function loadImages() {
+        // Get the image list from the input field
+        var imageList = document.getElementById("imageList").value;
 
-            // Split the list into an array
-            var images = imageList.split(" ");
+        // Split the list into an array
+        var images = imageList.split(" ");
 
-            // Clear the image container
-            document.getElementById("image-container").innerHTML = "";
+        // Clear the image container
+        document.getElementById("image-container").innerHTML = "";
 
-            // Reset videos array
-            videos = [];
+        // Reset videos array
+        videos = [];
 
-            // Loop through the array and display images with serial numbers
-            for (var i = 0; i < images.length; i++) {
-                // Create video element
-                var video = document.createElement("video");
-                video.src = images[i];
-                video.controls = true;
-                video.loop = true; // Add the 'loop' attribute
+        // Loop through the array and display images with serial numbers
+        for (var i = 0; i < images.length; i++) {
+            // Create video element
+            var video = document.createElement("video");
+            video.src = images[i];
+            video.controls = true;
+            video.loop = true; // Add the 'loop' attribute
 
-                const p = document.createElement("p");
-                const node = document.createTextNode("Link: " + images[i].toString());
-                p.appendChild(node);
+            const p = document.createElement("p");
+            const node = document.createTextNode("Link: " + images[i].toString());
+            p.appendChild(node);
 
-                // Create serial number element
-                var serial = document.createElement("div");
-                serial.className = "serial";
-                serial.textContent = "Image " + (i + 1);
+            // Create serial number element
+            var serial = document.createElement("div");
+            serial.className = "serial";
+            serial.textContent = "Image " + (i + 1);
 
-                //Create textarea:
-                var textInput = document.createElement("textarea")
-                textInput.ATTRIBUTE_NODE = 'name="instapic" id="instapic" cols="40" rows="10"'
-                textInput.name = "For Writing Purpose";
-                textInput.cols = 80;
-                textInput.rows = 7;
+            //Create textarea:
+            var textInput = document.createElement("textarea")
+            textInput.ATTRIBUTE_NODE = 'name="instapic" id="instapic" cols="40" rows="10"'
+            textInput.name = "For Writing Purpose";
+            textInput.cols = 80;
+            textInput.rows = 7;
 
-                // Create container element for the video and serial number
-                var container = document.createElement("div");
-                container.appendChild(video);
-                container.appendChild(serial);
-                container.appendChild(p);
-                container.appendChild(textInput);
-                container.className = "box";                
+            // Create container element for the video and serial number
+            var container = document.createElement("div");
+            container.appendChild(video);
+            container.appendChild(serial);
+            container.appendChild(p);
+            container.appendChild(textInput);
+            container.className = "box";                
 
-                // Add the container to the image container on the web page
-                document.getElementById("image-container").appendChild(container);
+            // Add the container to the image container on the web page
+            document.getElementById("image-container").appendChild(container);
 
-                // Push the video element to the videos array
-                videos.push(video);
-            }
+            // Push the video element to the videos array
+            videos.push(video);            
         }
-    </script>
+            const f = document.createElement("footer");
+            const node1 = document.createTextNode("© Copyright 2023, All rights reserved by AKHILESH");
+            const br = document.createElement("br");
+            const node2 = document.createTextNode("If you have reached here, till the bottom of the page, you are AWESOME");
+            f.appendChild(node1);
+            f.appendChild(br);
+            f.appendChild(node2);
+            // document.getElementById("my_footer").appendChild(f);       
+
+            document.body.appendChild(f)
+    }
+</script>
+
 </body>
 </html>
