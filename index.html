@@ -189,6 +189,8 @@ button:hover{
         }
     }
 
+    var footer_count = 0;
+    
     function loadImages() {
         // Get the image list from the input field
         var imageList = document.getElementById("imageList").value;
@@ -240,6 +242,8 @@ button:hover{
             // Push the video element to the videos array
             videos.push(video);            
         }
+
+            if (footer_count == 0){
             const f = document.createElement("footer");
             const node1 = document.createTextNode("© Copyright 2023, All rights reserved by AKHILESH");
             const br = document.createElement("br");
@@ -250,6 +254,9 @@ button:hover{
             // document.getElementById("my_footer").appendChild(f);       
 
             document.body.appendChild(f)
+            footer_count = footer_count+1;
+            console.log(footer_count)
+            }
     }
 </script>
 
